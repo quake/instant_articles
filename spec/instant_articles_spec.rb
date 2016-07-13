@@ -84,13 +84,13 @@ describe InstantArticles do
     expect(cleaned_content(html1)).to eq(cleaned_value(expected1))
   end
 
-  it "adds op-social class to social embeds" do
+  it "adds op-interactive class to social embeds" do
     html1 = <<-HTML
         <p><figure><iframe src="https://www.youtube.com/embed/3RwRUfx0g3Y" width="560" height="315" frameborder="0" allowfullscreen=""></iframe></figure></p>
     HTML
 
     expected1 = <<-HTML
-        <figure class="op-social"><iframe src="https://www.youtube.com/embed/3RwRUfx0g3Y" width="560" height="315" frameborder="0" allowfullscreen=""></iframe></figure>
+        <figure class="op-interactive"><iframe src="https://www.youtube.com/embed/3RwRUfx0g3Y" width="560" height="315" frameborder="0" allowfullscreen=""></iframe></figure>
     HTML
     expect(cleaned_content(html1)).to eq(cleaned_value(expected1))
   end
@@ -101,7 +101,7 @@ describe InstantArticles do
         </blockquote>
     HTML
     expected1 = <<-HTML
-        <figure class="op-social">
+        <figure class="op-interactive">
           <blockquote class="instagram-media">
           </blockquote>
         </figure>
@@ -115,7 +115,7 @@ describe InstantArticles do
         <blockquote class="instagram-media" style="border: 0px; max-width: 658px; width: calc(100% - 2px);margin: 1px;border-radius: 4px; box-shadow: rgba(0, 0, 0, 0.498039) 0px 0px 1px 0px, rgba(0, 0, 0, 0.14902) 0px 1px 10px 0px; display: block; padding: 0px; background: rgb(255, 255, 255);"></blockquote>
     HTML
     expected1 = <<-HTML
-        <figure class="op-social"><blockquote class="instagram-media" style="border: 0px; max-width: 658px; width: calc(100% - 2px);margin: 0 auto;border-radius: 4px; box-shadow: rgba(0, 0, 0, 0.498039) 0px 0px 1px 0px, rgba(0, 0, 0, 0.14902) 0px 1px 10px 0px; display: block; padding: 0px; background: rgb(255, 255, 255);"></blockquote></figure>
+        <figure class="op-interactive"><blockquote class="instagram-media" style="border: 0px; max-width: 658px; width: calc(100% - 2px);margin: 0 auto;border-radius: 4px; box-shadow: rgba(0, 0, 0, 0.498039) 0px 0px 1px 0px, rgba(0, 0, 0, 0.14902) 0px 1px 10px 0px; display: block; padding: 0px; background: rgb(255, 255, 255);"></blockquote></figure>
     HTML
     expect(cleaned_content(html1)).to eq(cleaned_value(expected1))
   end
@@ -130,12 +130,12 @@ describe InstantArticles do
     expect(cleaned_content(html1)).to eq(cleaned_value(expected1))
   end
 
-  it "adds op-social to already existing figure tags if they contain a social media iframe" do
+  it "adds op-interactive to already existing figure tags if they contain a social media iframe" do
     html1 = <<-HTML
         <figure><iframe src="https://www.youtube.com/whatever"></iframe></figure>
     HTML
     expected1 = <<-HTML
-        <figure class="op-social"><iframe src="https://www.youtube.com/whatever"></iframe></figure>
+        <figure class="op-interactive"><iframe src="https://www.youtube.com/whatever"></iframe></figure>
     HTML
     expect(cleaned_content(html1)).to eq(cleaned_value(expected1))
   end
@@ -156,6 +156,16 @@ describe InstantArticles do
     HTML
     expected1 = <<-HTML
         <blockquote></blockquote>
+    HTML
+    expect(cleaned_content(html1)).to eq(cleaned_value(expected1))
+  end
+
+  it "replaces op-social by op-interactive" do
+    html1 = <<-HTML
+      <figure class="op-social"><iframe src="http://www.littlethings.com/video-embed.php?vid=WWul3O6q&amp;dfpid=19478"></iframe></figure>
+    HTML
+    expected1 = <<-HTML
+      <figure class="op-interactive"><iframe src="http://www.littlethings.com/video-embed.php?vid=WWul3O6q&amp;dfpid=19478"></iframe></figure>
     HTML
     expect(cleaned_content(html1)).to eq(cleaned_value(expected1))
   end

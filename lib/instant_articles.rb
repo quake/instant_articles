@@ -44,12 +44,15 @@ module InstantArticles
       figures = @doc.xpath("//figure")
       figures.each do |f|
         cls_name = f.attribute("class").nil? ? "" : f.attribute("class").value.to_s
-        next if cls_name.include? "op-social"
+        if cls_name.include? "op-social"
+          cls_name.gsub!('op-social', 'op-interactive')
+          f['class'] = cls_name
+        end
         next if cls_name.include? "op-interactive"
         html = f.inner_html
         next unless html.include?('iframe') || html.include?('blockquote')
         if SOCIAL_SERVICES.any? { |service| html.include? service }
-          f['class'] = cls_name.empty? ? "op-social" : "#{cls_name} op-social"
+          f['class'] = cls_name.empty? ? "op-interactive" : "#{cls_name} op-interactive"
         elsif html.include? 'iframe'
           f['class'] = cls_name.empty? ? "op-interactive" : "#{cls_name} op-interactive"
         end
