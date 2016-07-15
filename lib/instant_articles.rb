@@ -29,6 +29,11 @@ module InstantArticles
         # surround iframes and images
         elements = @doc.xpath("//#{tag}")
         elements.each do |element|
+
+          # If adform skip swap
+          url = element.attribute("src")
+          next if url.include? "adform"
+
           if element.matches? 'blockquote'
             cls_name = element.attribute("class").nil? ? "" : element.attribute("class").value.to_s
             next unless cls_name.include? 'instagram-media'
