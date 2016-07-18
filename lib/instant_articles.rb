@@ -31,8 +31,10 @@ module InstantArticles
         elements.each do |element|
 
           # If adform skip swap
-          url = element.attribute("src")
-          next if url.include? "adform"
+          src = element.attribute("src")
+          if defined?(src)
+            next if src.include? "adform"
+          end
 
           if element.matches? 'blockquote'
             cls_name = element.attribute("class").nil? ? "" : element.attribute("class").value.to_s
