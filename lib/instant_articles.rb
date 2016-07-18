@@ -32,7 +32,7 @@ module InstantArticles
 
           # If adform skip swap
           src = element.attribute("src")
-          if defined?(src)
+          unless src.nil?
             next if src.include? "adform"
           end
 
