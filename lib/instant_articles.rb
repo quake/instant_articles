@@ -6,6 +6,7 @@ module InstantArticles
 
     MEDIA_ELEMENTS = %w(img iframe blockquote)
     SOCIAL_SERVICES = %w(instagram facebook twitter vine youtube)
+    BLOCKQUOTES = %w(instagram-media twitter-tweet)
 
     def initialize(content)
       @doc = Nokogiri::HTML.parse(content)
@@ -29,6 +30,16 @@ module InstantArticles
         # surround iframes and images
         elements = @doc.xpath("//#{tag}")
         elements.each do |element|
+          # BlockQuotes
+          if element.matches? 'blockquote'
+            cls_name = element.attribute("class").nil? ? "" : element.attribute("class").value.to_s
+
+            next unless cls_name.any? { |i| BLOCKQUOTES.include? i }
+
+            unless element.attribute('style').nil?
+              element['style'] = element.attribute('style').value.to_s.gsub(/margin:[^;]+/, 'margin: 0 auto')
+            end
+          end
 
           # If adform skip swap
           src = element.attribute("src")
@@ -36,13 +47,6 @@ module InstantArticles
             next if src.include? "adform"
           end
 
-          if element.matches? 'blockquote'
-            cls_name = element.attribute("class").nil? ? "" : element.attribute("class").value.to_s
-            next unless cls_name.include? 'instagram-media'
-            unless element.attribute('style').nil?
-              element['style'] = element.attribute('style').value.to_s.gsub(/margin:[^;]+/, 'margin: 0 auto')
-            end
-          end
           next if element.parent.matches? 'figure'
           element.swap("<figure>#{element.to_html}</figure>")
         end
