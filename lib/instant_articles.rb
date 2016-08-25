@@ -36,6 +36,26 @@ module InstantArticles
 
             next unless [cls_name].any? { |i| BLOCKQUOTES.include? i }
 
+            # If twitter tweet
+            if cls_name.include? "twitter"
+              if element.next_element.matches? 'script'
+
+                fig = @doc.create_element('figure')
+                iframe = @doc.create_element('iframe')
+
+                script = element.next_element
+                element.before(fig)
+                
+                iframe.add_child(element)
+                iframe.add_child(script)
+
+                fig.add_child(iframe)
+
+                next
+              end
+            end
+
+
             unless element.attribute('style').nil?
               element['style'] = element.attribute('style').value.to_s.gsub(/margin:[^;]+/, 'margin: 0 auto')
             end
