@@ -38,22 +38,22 @@ module InstantArticles
 
             # If twitter tweet
             if cls_name.include? "twitter"
-              if element.next_element.matches? 'script'
 
-                fig = @doc.create_element('figure')
-                fig['class'] = 'op-interactive'
-                iframe = @doc.create_element('iframe')
+              fig = @doc.create_element('figure')
+              fig['class'] = 'op-interactive'
+              iframe = @doc.create_element('iframe')
+              element.before(fig)
 
+              if element.next_element && element.next_element.matches?('script')
                 script = element.next_element
-                element.before(fig)
-                
                 iframe.add_child(element)
                 iframe.add_child(script)
-
-                fig.add_child(iframe)
-
-                next
+              else
+                iframe.add_child(element)
               end
+
+              fig.add_child(iframe)
+              return
             end
 
 

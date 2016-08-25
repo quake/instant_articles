@@ -78,6 +78,23 @@ describe InstantArticles do
     expect(cleaned_content(html1)).to eq(cleaned_value(expected1))
   end
 
+
+  it "surrounds tweets blockquoute with figure tag around without script tag" do
+    html1 = <<-HTML
+      <blockquote class="twitter-tweet" data-lang="sv">
+      <p dir="ltr" lang="en">Before they knew it, he dragged her across their yard.. <a href="https://t.co/sQwcDTk9fi">https://t.co/sQwcDTk9fi</a></p>
+      HeroViral (@HeroViral) <a href="https://twitter.com/HeroViral/status/754754594765496320">17 juli 2016</a></blockquote>
+    HTML
+
+    expected1 = <<-HTML
+      <figure class="op-interactive"><iframe><blockquote class="twitter-tweet" data-lang="sv">
+      <p dir="ltr" lang="en">Before they knew it, he dragged her across their yard.. <a href="https://t.co/sQwcDTk9fi">https://t.co/sQwcDTk9fi</a></p>
+      HeroViral (@HeroViral) <a href="https://twitter.com/HeroViral/status/754754594765496320">17 juli 2016</a></blockquote></iframe></figure>
+    HTML
+    expect(cleaned_content(html1)).to eq(cleaned_value(expected1))
+  end
+
+
   it "surrounds also iframes with a figure tag" do
     html1 = <<-HTML
         <p><iframe src="http://example.com" width="560" height="315" frameborder="0" allowfullscreen=""></iframe></p>
