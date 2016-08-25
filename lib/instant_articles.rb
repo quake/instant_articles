@@ -34,7 +34,7 @@ module InstantArticles
           if element.matches? 'blockquote'
             cls_name = element.attribute("class").nil? ? "" : element.attribute("class").value.to_s
 
-            next unless cls_name.any? { |i| BLOCKQUOTES.include? i }
+            next unless [cls_name].any? { |i| BLOCKQUOTES.include? i }
 
             unless element.attribute('style').nil?
               element['style'] = element.attribute('style').value.to_s.gsub(/margin:[^;]+/, 'margin: 0 auto')
