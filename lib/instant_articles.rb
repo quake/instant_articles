@@ -63,10 +63,23 @@ module InstantArticles
           end
 
           # If adform skip swap
-          src = element.attribute("src")
+          src = element["src"]
           unless src.nil?
             next if src.include? "adform"
           end
+
+          # Set iframe src to always HTTPS
+          if element.matches? 'iframe'
+            unless src.nil?
+              if src[0..1] == "//"
+                element['src'] = "https:#{src}"
+              else
+                # just replace http: right of
+                element['src'] = element['src'].gsub('http://', 'https://')
+              end
+            end
+          end
+
 
           next if element.parent.matches? 'figure'
           element.swap("<figure>#{element.to_html}</figure>")

@@ -62,46 +62,13 @@ describe InstantArticles do
     expect(cleaned_content(html1)).to eq(cleaned_value(expected1))
   end
 
-  it "surrounds tweets blockquoute with figure tag around the script tag also" do
-    html1 = <<-HTML
-      <blockquote class="twitter-tweet" data-lang="sv">
-      <p dir="ltr" lang="en">Before they knew it, he dragged her across their yard.. <a href="https://t.co/sQwcDTk9fi">https://t.co/sQwcDTk9fi</a></p>
-      HeroViral (@HeroViral) <a href="https://twitter.com/HeroViral/status/754754594765496320">17 juli 2016</a></blockquote>
-      <script src="//platform.twitter.com/widgets.js"></script>
-    HTML
-
-    expected1 = <<-HTML
-      <figure class="op-interactive"><iframe><blockquote class="twitter-tweet" data-lang="sv">
-      <p dir="ltr" lang="en">Before they knew it, he dragged her across their yard.. <a href="https://t.co/sQwcDTk9fi">https://t.co/sQwcDTk9fi</a></p>
-      HeroViral (@HeroViral) <a href="https://twitter.com/HeroViral/status/754754594765496320">17 juli 2016</a></blockquote><script src="//platform.twitter.com/widgets.js"></script></iframe></figure>
-    HTML
-    expect(cleaned_content(html1)).to eq(cleaned_value(expected1))
-  end
-
-
-  it "surrounds tweets blockquoute with figure tag around without script tag" do
-    html1 = <<-HTML
-      <blockquote class="twitter-tweet" data-lang="sv">
-      <p dir="ltr" lang="en">Before they knew it, he dragged her across their yard.. <a href="https://t.co/sQwcDTk9fi">https://t.co/sQwcDTk9fi</a></p>
-      HeroViral (@HeroViral) <a href="https://twitter.com/HeroViral/status/754754594765496320">17 juli 2016</a></blockquote>
-    HTML
-
-    expected1 = <<-HTML
-      <figure class="op-interactive"><iframe><blockquote class="twitter-tweet" data-lang="sv">
-      <p dir="ltr" lang="en">Before they knew it, he dragged her across their yard.. <a href="https://t.co/sQwcDTk9fi">https://t.co/sQwcDTk9fi</a></p>
-      HeroViral (@HeroViral) <a href="https://twitter.com/HeroViral/status/754754594765496320">17 juli 2016</a></blockquote></iframe></figure>
-    HTML
-    expect(cleaned_content(html1)).to eq(cleaned_value(expected1))
-  end
-
-
   it "surrounds also iframes with a figure tag" do
     html1 = <<-HTML
         <p><iframe src="http://example.com" width="560" height="315" frameborder="0" allowfullscreen=""></iframe></p>
     HTML
 
     expected1 = <<-HTML
-        <figure class="op-interactive"><iframe src="http://example.com" width="560" height="315" frameborder="0" allowfullscreen=""></iframe></figure>
+        <figure class="op-interactive"><iframe src="https://example.com" width="560" height="315" frameborder="0" allowfullscreen=""></iframe></figure>
     HTML
     expect(cleaned_content(html1)).to eq(cleaned_value(expected1))
   end
@@ -112,7 +79,7 @@ describe InstantArticles do
     HTML
 
     expected1 = <<-HTML
-        <figure class="op-interactive"><iframe src="http://example.com" width="560" height="315" frameborder="0" allowfullscreen=""></iframe></figure>
+        <figure class="op-interactive"><iframe src="https://example.com" width="560" height="315" frameborder="0" allowfullscreen=""></iframe></figure>
     HTML
     expect(cleaned_content(html1)).to eq(cleaned_value(expected1))
   end
@@ -178,7 +145,7 @@ describe InstantArticles do
         <figure><iframe src="http://www.littlethings.com/video-embed.php?vid=WWul3O6q&amp;dfpid=19478"></iframe></figure>
     HTML
     expected1 = <<-HTML
-        <figure class="op-interactive"><iframe src="http://www.littlethings.com/video-embed.php?vid=WWul3O6q&amp;dfpid=19478"></iframe></figure>
+        <figure class="op-interactive"><iframe src="https://www.littlethings.com/video-embed.php?vid=WWul3O6q&amp;dfpid=19478"></iframe></figure>
     HTML
     expect(cleaned_content(html1)).to eq(cleaned_value(expected1))
   end
@@ -198,8 +165,63 @@ describe InstantArticles do
       <figure class="op-social"><iframe src="http://www.littlethings.com/video-embed.php?vid=WWul3O6q&amp;dfpid=19478"></iframe></figure>
     HTML
     expected1 = <<-HTML
-      <figure class="op-interactive"><iframe src="http://www.littlethings.com/video-embed.php?vid=WWul3O6q&amp;dfpid=19478"></iframe></figure>
+      <figure class="op-interactive"><iframe src="https://www.littlethings.com/video-embed.php?vid=WWul3O6q&amp;dfpid=19478"></iframe></figure>
     HTML
     expect(cleaned_content(html1)).to eq(cleaned_value(expected1))
   end
+
+  it "surrounds tweets blockquoute with figure tag around the script tag also" do
+    html1 = <<-HTML
+      <blockquote class="twitter-tweet" data-lang="sv">
+      <p dir="ltr" lang="en">Before they knew it, he dragged her across their yard.. <a href="https://t.co/sQwcDTk9fi">https://t.co/sQwcDTk9fi</a></p>
+      HeroViral (@HeroViral) <a href="https://twitter.com/HeroViral/status/754754594765496320">17 juli 2016</a></blockquote>
+      <script src="//platform.twitter.com/widgets.js"></script>
+    HTML
+
+    expected1 = <<-HTML
+      <figure class="op-interactive"><iframe><blockquote class="twitter-tweet" data-lang="sv">
+      <p dir="ltr" lang="en">Before they knew it, he dragged her across their yard.. <a href="https://t.co/sQwcDTk9fi">https://t.co/sQwcDTk9fi</a></p>
+      HeroViral (@HeroViral) <a href="https://twitter.com/HeroViral/status/754754594765496320">17 juli 2016</a></blockquote><script src="//platform.twitter.com/widgets.js"></script></iframe></figure>
+    HTML
+    expect(cleaned_content(html1)).to eq(cleaned_value(expected1))
+  end
+
+
+  it "surrounds tweets blockquoute with figure tag around without script tag" do
+    html1 = <<-HTML
+      <blockquote class="twitter-tweet" data-lang="sv">
+      <p dir="ltr" lang="en">Before they knew it, he dragged her across their yard.. <a href="https://t.co/sQwcDTk9fi">https://t.co/sQwcDTk9fi</a></p>
+      HeroViral (@HeroViral) <a href="https://twitter.com/HeroViral/status/754754594765496320">17 juli 2016</a></blockquote>
+    HTML
+
+    expected1 = <<-HTML
+      <figure class="op-interactive"><iframe><blockquote class="twitter-tweet" data-lang="sv">
+      <p dir="ltr" lang="en">Before they knew it, he dragged her across their yard.. <a href="https://t.co/sQwcDTk9fi">https://t.co/sQwcDTk9fi</a></p>
+      HeroViral (@HeroViral) <a href="https://twitter.com/HeroViral/status/754754594765496320">17 juli 2016</a></blockquote></iframe></figure>
+    HTML
+    expect(cleaned_content(html1)).to eq(cleaned_value(expected1))
+  end
+
+  it "replaces src with https:// when //..." do
+    html1 = <<-HTML
+      <iframe class="giphy-embed" src="//giphy.com/embed/34nMZ08nkNNmg" width="480" height="270" frameborder="0" allowfullscreen=""></iframe>
+    HTML
+
+    expected1 = <<-HTML
+      <figure class="op-interactive"><iframe class="giphy-embed" src="https://giphy.com/embed/34nMZ08nkNNmg" width="480" height="270" frameborder="0" allowfullscreen=""></iframe></figure>
+    HTML
+    expect(cleaned_content(html1)).to eq(cleaned_value(expected1))
+  end
+
+  it "replaces src with https:// when http://..." do
+    html1 = <<-HTML
+      <iframe class="giphy-embed" src="http://giphy.com/embed/34nMZ08nkNNmg" width="480" height="270" frameborder="0" allowfullscreen=""></iframe>
+    HTML
+
+    expected1 = <<-HTML
+      <figure class="op-interactive"><iframe class="giphy-embed" src="https://giphy.com/embed/34nMZ08nkNNmg" width="480" height="270" frameborder="0" allowfullscreen=""></iframe></figure>
+    HTML
+    expect(cleaned_content(html1)).to eq(cleaned_value(expected1))
+  end
+
 end
