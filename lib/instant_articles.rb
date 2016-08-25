@@ -41,6 +41,7 @@ module InstantArticles
               if element.next_element.matches? 'script'
 
                 fig = @doc.create_element('figure')
+                fig['class'] = 'op-interactive'
                 iframe = @doc.create_element('iframe')
 
                 script = element.next_element
