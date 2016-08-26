@@ -107,6 +107,10 @@ module InstantArticles
     def clean_paragraphs
       paragraphs = @doc.xpath('//p')
       paragraphs.each do |p|
+
+        # Remove the &nbsp; p tags as they only make it ugly as f.
+        if p.inner_html == "\u00A0" then p.remove end
+
         last_node = p
         if p.text.to_s.strip.length == 0
           if p.inner_html == ''
@@ -119,6 +123,8 @@ module InstantArticles
             next
           end
         end
+
+
 
         if p.inner_html.include? '<figure'
           figures = p > 'figure'

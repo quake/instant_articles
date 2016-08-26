@@ -224,4 +224,26 @@ describe InstantArticles do
     expect(cleaned_content(html1)).to eq(cleaned_value(expected1))
   end
 
+  it "should remove empty tags" do
+    html1 = <<-HTML
+      <p></p>
+    HTML
+
+    expected1 = <<-HTML
+      
+    HTML
+    expect(cleaned_content(html1)).to eq(cleaned_value(expected1))
+  end  
+
+  it "should remove p tags with &nbsp;" do
+    html1 = <<-HTML
+      <p>&nbsp;</p>
+    HTML
+
+    expected1 = <<-HTML
+    
+    HTML
+    expect(cleaned_content(html1)).to eq(cleaned_value(expected1))
+  end  
+
 end
