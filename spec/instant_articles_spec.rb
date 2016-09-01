@@ -179,9 +179,9 @@ describe InstantArticles do
     HTML
 
     expected1 = <<-HTML
-      <figure class="op-interactive"><iframe><blockquote class="twitter-tweet" data-lang="sv">
+      <figure class="op-interactive"><blockquote class="twitter-tweet" data-lang="sv">
       <p dir="ltr" lang="en">Before they knew it, he dragged her across their yard.. <a href="https://t.co/sQwcDTk9fi">https://t.co/sQwcDTk9fi</a></p>
-      HeroViral (@HeroViral) <a href="https://twitter.com/HeroViral/status/754754594765496320">17 juli 2016</a></blockquote><script src="//platform.twitter.com/widgets.js"></script></iframe></figure>
+      HeroViral (@HeroViral) <a href="https://twitter.com/HeroViral/status/754754594765496320">17 juli 2016</a></blockquote></figure><script src="//platform.twitter.com/widgets.js"></script>
     HTML
     expect(cleaned_content(html1)).to eq(cleaned_value(expected1))
   end
@@ -195,12 +195,13 @@ describe InstantArticles do
     HTML
 
     expected1 = <<-HTML
-      <figure class="op-interactive"><iframe><blockquote class="twitter-tweet" data-lang="sv">
+      <figure class="op-interactive"><blockquote class="twitter-tweet" data-lang="sv">
       <p dir="ltr" lang="en">Before they knew it, he dragged her across their yard.. <a href="https://t.co/sQwcDTk9fi">https://t.co/sQwcDTk9fi</a></p>
-      HeroViral (@HeroViral) <a href="https://twitter.com/HeroViral/status/754754594765496320">17 juli 2016</a></blockquote></iframe></figure>
+      HeroViral (@HeroViral) <a href="https://twitter.com/HeroViral/status/754754594765496320">17 juli 2016</a></blockquote></figure>
     HTML
     expect(cleaned_content(html1)).to eq(cleaned_value(expected1))
   end
+
 
   it "replaces src with https:// when //..." do
     html1 = <<-HTML
