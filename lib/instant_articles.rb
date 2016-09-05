@@ -69,16 +69,17 @@ module InstantArticles
           end
 
           # Set iframe src to always HTTPS
-          if element.matches? 'iframe'
-            unless src.nil?
-              if src[0..1] == "//"
-                element['src'] = "https:#{src}"
-              else
-                # just replace http: right of
-                element['src'] = element['src'].gsub('http://', 'https://')
-              end
-            end
-          end
+          # Todo: When separated from admin cms, activate this feature again.
+          # if element.matches? 'iframe'
+          #   unless src.nil?
+          #     if src[0..1] == "//"
+          #       element['src'] = "https:#{src}"
+          #     else
+          #       # just replace http: right of
+          #       element['src'] = element['src'].gsub('http://', 'https://')
+          #     end
+          #   end
+          # end
 
 
           next if element.parent.matches? 'figure'
