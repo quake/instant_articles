@@ -1,5 +1,6 @@
 require "instant_articles/version"
 require 'nokogiri'
+require 'cgi'
 
 module InstantArticles
   class Content
@@ -36,25 +37,25 @@ module InstantArticles
 
             next unless [cls_name].any? { |i| BLOCKQUOTES.include? i }
 
-            # If twitter tweet
-            if cls_name.include? "twitter"
-
-              fig = @doc.create_element('figure')
-              fig['class'] = 'op-interactive'
-              iframe = @doc.create_element('iframe')
-              element.before(fig)
-
-              if element.next_element && element.next_element.matches?('script')
-                script = element.next_element
-                iframe.add_child(element)
-                iframe.add_child(script)
-              else
-                iframe.add_child(element)
-              end
-
-              fig.add_child(iframe)
-              return
-            end
+            # # If twitter tweet
+            # if cls_name.include? "twitter"
+            #
+            #   fig = @doc.create_element('figure')
+            #   fig['class'] = 'op-interactive'
+            #   iframe = @doc.create_element('iframe')
+            #   element.before(fig)
+            #
+            #   if element.next_element && element.next_element.matches?('script')
+            #     script = element.next_element
+            #     iframe.add_child(element)
+            #     iframe.add_child(script)
+            #   else
+            #     iframe.add_child(element)
+            #   end
+            #
+            #   fig.add_child(iframe)
+            #   return
+            # end
 
 
             unless element.attribute('style').nil?

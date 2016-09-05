@@ -202,10 +202,18 @@ describe InstantArticles do
     expect(cleaned_content(html1)).to eq(cleaned_value(expected1))
   end
 
+<<<<<<< HEAD
   # it "replaces src with https:// when //..." do
   #   html1 = <<-HTML
   #     <iframe class="giphy-embed" src="//giphy.com/embed/34nMZ08nkNNmg" width="480" height="270" frameborder="0" allowfullscreen=""></iframe>
   #   HTML
+=======
+
+  it "replaces src with https:// when //..." do
+    html1 = <<-HTML
+      <iframe class="giphy-embed" src="//giphy.com/embed/34nMZ08nkNNmg" width="480" height="270" frameborder="0" allowfullscreen=""></iframe>
+    HTML
+>>>>>>> 5e30d367be441f0ef2ecfc0d58ca9bbb7893f8c4
 
   #   expected1 = <<-HTML
   #     <figure class="op-interactive"><iframe class="giphy-embed" src="https://giphy.com/embed/34nMZ08nkNNmg" width="480" height="270" frameborder="0" allowfullscreen=""></iframe></figure>
