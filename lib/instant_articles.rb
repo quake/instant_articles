@@ -25,6 +25,7 @@ module InstantArticles
       replace_media
       clean_figures
       clean_headlines
+      clean_images
     end
 
     def clean_paragraphs
@@ -153,6 +154,17 @@ module InstantArticles
         headlines.each do |headline|
           headline.swap("<h2>#{headline.inner_html}</h2>")
         end
+      end
+    end
+
+    def clean_images
+      @doc.xpath('//img').each do |img|
+        if img.attr('data-mode').nil?
+          img['data-mode'] = 'aspect-fit'
+        end
+        img.delete('width')
+        img.delete('height')
+        img.delete('style')
       end
     end
 

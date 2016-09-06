@@ -19,7 +19,7 @@ describe InstantArticles do
     HTML
     expected1 = <<-HTML
         <p>Det här är 7-åriga Audrianna. Hon vill inte leka som de andra flickorna på hennes skola. I stället för att leka med dockor och klä sig i klänningar föredrar hon att bära jeans och ge sig ut på våghalsiga cykelturer. Det tyckte inte hennes skolkamrater om och Audrianna blev mobbad och hånad i skolan, enligt <a href="https://www.youtube.com/watch?v=Ux6-CGc5KbU&amp;feature=youtu.be" target="_blank">ABC News</a>.<br>
-</p><figure id="attachment_150551" style="width: 600px" class="wp-caption alignnone"><img src="http://s3.eu-central-1.amazonaws.com/cdn.newsner.com/attachments/images/000/247/769/newsner_default/flickan.jpg?1465318999" alt="Foto: Youtube." width="600" height="600" class="size-newsner-default wp-image-150551" sizes="(max-width: 600px) 100vw, 600px"><figcaption class="wp-caption-text">Foto: <a href="https://www.youtube.com/watch?v=Ux6-CGc5KbU&amp;feature=youtu.be" target="_blank">Youtube</a>.</figcaption></figure>
+</p><figure id="attachment_150551" style="width: 600px" class="wp-caption alignnone"><img src="http://s3.eu-central-1.amazonaws.com/cdn.newsner.com/attachments/images/000/247/769/newsner_default/flickan.jpg?1465318999" alt="Foto: Youtube." class="size-newsner-default wp-image-150551" sizes="(max-width: 600px) 100vw, 600px" data-mode="aspect-fit"><figcaption class="wp-caption-text">Foto: <a href="https://www.youtube.com/watch?v=Ux6-CGc5KbU&amp;feature=youtu.be" target="_blank">Youtube</a>.</figcaption></figure>
     HTML
 
     expect(cleaned_content(html1)).to eq(cleaned_value(expected1))
@@ -90,7 +90,7 @@ describe InstantArticles do
         <p><figure><figure><img src="example.jpg"></figure></figure></p>
     HTML
     expected1 = <<-HTML
-        <figure><img src="example.jpg"></figure>
+        <figure><img src="example.jpg" data-mode="aspect-fit"></figure>
     HTML
     expect(cleaned_content(html1)).to eq(cleaned_value(expected1))
   end
@@ -233,6 +233,36 @@ describe InstantArticles do
     HTML
     expected = <<-HTML
       <figure class="op-interactive"><iframe><blockquote class="instagram-media"></blockquote></iframe></figure>
+    HTML
+    expect(cleaned_content(html)).to eq(cleaned_value(expected))
+  end
+
+  it 'adds data-mode to images' do
+    html = <<-HTML
+      <img src="test.jpg">
+    HTML
+    expected = <<-HTML
+      <figure><img src="test.jpg" data-mode="aspect-fit"></figure>
+    HTML
+    expect(cleaned_content(html)).to eq(cleaned_value(expected))
+  end
+
+  it 'removes width and height attributes from images' do
+    html = <<-HTML
+      <img src="test.jpg" width="200" height="500">
+    HTML
+    expected = <<-HTML
+      <figure><img src="test.jpg" data-mode="aspect-fit"></figure>
+    HTML
+    expect(cleaned_content(html)).to eq(cleaned_value(expected))
+  end
+
+  it 'removes style attributes from images' do
+    html = <<-HTML
+      <img src="test.jpg" style="width:500px">
+    HTML
+    expected = <<-HTML
+      <figure><img src="test.jpg" data-mode="aspect-fit"></figure>
     HTML
     expect(cleaned_content(html)).to eq(cleaned_value(expected))
   end
