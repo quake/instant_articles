@@ -99,19 +99,21 @@ module InstantArticles
           end
 
           if element.matches?('blockquote')
-            surrounding = []
-            unless element.parent.matches?('iframe')
-              surrounding << 'iframe'
+            fig = @doc.create_element('figure')
+            fig['class'] = 'op-interactive'
+            iframe = @doc.create_element('iframe')
+            element.before(fig)
+
+            if element.next_element && element.next_element.matches?('script')
+              script = element.next_element
+              iframe.add_child(element)
+              iframe.add_child(script)
+            else
+              iframe.add_child(element)
             end
-            unless element.parent.parent.matches?('figure')
-              surrounding << 'figure'
-            end
-            swap = ""
-            surrounding.reverse_each do |tag|
-              swap << "<#{tag}>"
-            end
-            swap << element.to_html
-            element.swap(swap)
+
+            fig.add_child(iframe)
+            return          
           else
             next if element.parent.matches? 'figure'
             element.swap("<figure>#{element.to_html}</figure>")
