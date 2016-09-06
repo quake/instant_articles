@@ -33,7 +33,7 @@ describe InstantArticles do
     HTML
 
     expected1 = <<-HTML
-        <figure class="op-interactive"><iframe src="http://example.com" width="560" height="315" frameborder="0" allowfullscreen=""></iframe></figure>
+        <figure class="op-interactive"><iframe src="https://example.com" width="560" height="315" frameborder="0" allowfullscreen=""></iframe></figure>
     HTML
     expect(cleaned_content(html1)).to eq(cleaned_value(expected1))
   end
@@ -44,7 +44,7 @@ describe InstantArticles do
     HTML
 
     expected1 = <<-HTML
-        <figure class="op-interactive"><iframe src="http://example.com" width="560" height="315" frameborder="0" allowfullscreen=""></iframe></figure>
+        <figure class="op-interactive"><iframe src="https://example.com" width="560" height="315" frameborder="0" allowfullscreen=""></iframe></figure>
     HTML
     expect(cleaned_content(html1)).to eq(cleaned_value(expected1))
   end
@@ -110,7 +110,7 @@ describe InstantArticles do
         <figure><iframe src="http://www.littlethings.com/video-embed.php?vid=WWul3O6q&amp;dfpid=19478"></iframe></figure>
     HTML
     expected1 = <<-HTML
-        <figure class="op-interactive"><iframe src="http://www.littlethings.com/video-embed.php?vid=WWul3O6q&amp;dfpid=19478"></iframe></figure>
+        <figure class="op-interactive"><iframe src="https://www.littlethings.com/video-embed.php?vid=WWul3O6q&amp;dfpid=19478"></iframe></figure>
     HTML
     expect(cleaned_content(html1)).to eq(cleaned_value(expected1))
   end
@@ -130,7 +130,7 @@ describe InstantArticles do
       <figure class="op-social"><iframe src="http://www.littlethings.com/video-embed.php?vid=WWul3O6q&amp;dfpid=19478"></iframe></figure>
     HTML
     expected1 = <<-HTML
-      <figure class="op-interactive"><iframe src="http://www.littlethings.com/video-embed.php?vid=WWul3O6q&amp;dfpid=19478"></iframe></figure>
+      <figure class="op-interactive"><iframe src="https://www.littlethings.com/video-embed.php?vid=WWul3O6q&amp;dfpid=19478"></iframe></figure>
     HTML
     expect(cleaned_content(html1)).to eq(cleaned_value(expected1))
   end
@@ -167,27 +167,27 @@ describe InstantArticles do
     expect(cleaned_content(html1)).to eq(cleaned_value(expected1))
   end
 
-  # it "replaces src with https:// when //..." do
-  #   html1 = <<-HTML
-  #     <iframe class="giphy-embed" src="//giphy.com/embed/34nMZ08nkNNmg" width="480" height="270" frameborder="0" allowfullscreen=""></iframe>
-  #   HTML
+  it "replaces src with https:// when //..." do
+    html1 = <<-HTML
+      <iframe class="giphy-embed" src="//giphy.com/embed/34nMZ08nkNNmg" width="480" height="270" frameborder="0" allowfullscreen=""></iframe>
+    HTML
 
-  #   expected1 = <<-HTML
-  #     <figure class="op-interactive"><iframe class="giphy-embed" src="https://giphy.com/embed/34nMZ08nkNNmg" width="480" height="270" frameborder="0" allowfullscreen=""></iframe></figure>
-  #   HTML
-  #   expect(cleaned_content(html1)).to eq(cleaned_value(expected1))
-  # end
+    expected1 = <<-HTML
+      <figure class="op-interactive"><iframe class="giphy-embed" src="https://giphy.com/embed/34nMZ08nkNNmg" width="480" height="270" frameborder="0" allowfullscreen=""></iframe></figure>
+    HTML
+    expect(cleaned_content(html1)).to eq(cleaned_value(expected1))
+  end
 
-  # it "replaces src with https:// when http://..." do
-  #   html1 = <<-HTML
-  #     <iframe class="giphy-embed" src="http://giphy.com/embed/34nMZ08nkNNmg" width="480" height="270" frameborder="0" allowfullscreen=""></iframe>
-  #   HTML
+  it "replaces src with https:// when http://..." do
+    html1 = <<-HTML
+      <iframe class="giphy-embed" src="http://giphy.com/embed/34nMZ08nkNNmg" width="480" height="270" frameborder="0" allowfullscreen=""></iframe>
+    HTML
 
-  #   expected1 = <<-HTML
-  #     <figure class="op-interactive"><iframe class="giphy-embed" src="https://giphy.com/embed/34nMZ08nkNNmg" width="480" height="270" frameborder="0" allowfullscreen=""></iframe></figure>
-  #   HTML
-  #   expect(cleaned_content(html1)).to eq(cleaned_value(expected1))
-  # end
+    expected1 = <<-HTML
+      <figure class="op-interactive"><iframe class="giphy-embed" src="https://giphy.com/embed/34nMZ08nkNNmg" width="480" height="270" frameborder="0" allowfullscreen=""></iframe></figure>
+    HTML
+    expect(cleaned_content(html1)).to eq(cleaned_value(expected1))
+  end
 
 
   it 'replaces all headlines except h1 with h2' do
