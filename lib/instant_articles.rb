@@ -100,6 +100,10 @@ module InstantArticles
           end
 
           if element.matches?('blockquote')
+
+            # Check if older parser have created figures without the script included
+            look_after_script = element.parent && element.parent.matches?("figure")
+
             fig = @doc.create_element('figure')
             fig['class'] = 'op-interactive'
             iframe = @doc.create_element('iframe')
@@ -110,8 +114,18 @@ module InstantArticles
               iframe.add_child(element)
               iframe.add_child(script)
             else
-              iframe.add_child(element)
+              # If look after script and script after parent node is present. Include that into the figure
+              if look_after_script && element.parent && element.parent.next_element.matches?('script')
+                script = element.parent.next_element
+                iframe.add_child(element)
+                iframe.add_child(script)
+              else
+                iframe.add_child(element)
+              end
+              
             end
+
+
 
             fig.add_child(iframe)
             return          
@@ -121,6 +135,8 @@ module InstantArticles
           end
         end
       end
+
+
 
       figures = @doc.xpath("//figure")
       figures.each do |f|
