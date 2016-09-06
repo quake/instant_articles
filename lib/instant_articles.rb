@@ -21,9 +21,44 @@ module InstantArticles
     protected
 
     def clean_content
-      replace_media
       clean_paragraphs
+      replace_media
       clean_figures
+      clean_headlines
+    end
+
+    def clean_paragraphs
+      @doc.xpath('//p').each do |p|
+        if p.inner_html == "\u00A0" then p.remove end
+
+        last_node = p
+        if p.text.to_s.strip.length == 0
+          if p.inner_html == ''
+            p.remove
+            next
+          end
+          if p > 'script'
+            # we have a script tag - move out of the p tag
+            p.swap(p.inner_html)
+            next
+          end
+        end
+
+        if p.inner_html.include? '<figure'
+          figures = p > 'figure'
+          content_parts = p.inner_html.split(%r{<figure\b[^>]*>.*?</figure>})
+          content_parts.each_with_index do |cp, index|
+            if index == 0
+              p.inner_html = cp
+            else
+              last_node = last_node.after("<p>#{cp}</p>")
+            end
+            unless figures[index].nil?
+              last_node = last_node.after(figures[index].to_html)
+            end
+          end
+        end
+      end
     end
 
     def replace_media
@@ -37,30 +72,11 @@ module InstantArticles
 
             next unless [cls_name].any? { |i| BLOCKQUOTES.include? i }
 
-            # # If twitter tweet
-            # if cls_name.include? "twitter"
-            #
-            #   fig = @doc.create_element('figure')
-            #   fig['class'] = 'op-interactive'
-            #   iframe = @doc.create_element('iframe')
-            #   element.before(fig)
-            #
-            #   if element.next_element && element.next_element.matches?('script')
-            #     script = element.next_element
-            #     iframe.add_child(element)
-            #     iframe.add_child(script)
-            #   else
-            #     iframe.add_child(element)
-            #   end
-            #
-            #   fig.add_child(iframe)
-            #   return
-            # end
-
 
             unless element.attribute('style').nil?
               element['style'] = element.attribute('style').value.to_s.gsub(/margin:[^;]+/, 'margin: 0 auto')
             end
+
           end
 
           # If adform skip swap
@@ -81,9 +97,24 @@ module InstantArticles
             end
           end
 
-
-          next if element.parent.matches? 'figure'
-          element.swap("<figure>#{element.to_html}</figure>")
+          if element.matches?('blockquote')
+            surrounding = []
+            unless element.parent.matches?('iframe')
+              surrounding << 'iframe'
+            end
+            unless element.parent.parent.matches?('figure')
+              surrounding << 'figure'
+            end
+            swap = ""
+            surrounding.reverse_each do |tag|
+              swap << "<#{tag}>"
+            end
+            swap << element.to_html
+            element.swap(swap)
+          else
+            next if element.parent.matches? 'figure'
+            element.swap("<figure>#{element.to_html}</figure>")
+          end
         end
       end
 
@@ -105,49 +136,20 @@ module InstantArticles
       end
     end
 
-    def clean_paragraphs
-      paragraphs = @doc.xpath('//p')
-      paragraphs.each do |p|
-
-        # Remove the &nbsp; p tags as they only make it ugly as f.
-        if p.inner_html == "\u00A0" then p.remove end
-
-        last_node = p
-        if p.text.to_s.strip.length == 0
-          if p.inner_html == ''
-            p.remove
-            next
-          end
-          if p > 'script'
-            # we have a script tag - move out of the p tag
-            p.swap(p.inner_html)
-            next
-          end
-        end
-
-
-
-        if p.inner_html.include? '<figure'
-          figures = p > 'figure'
-          content_parts = p.inner_html.split(%r{<figure\b[^>]*>.*?</figure>})
-          content_parts.each_with_index do |cp, index|
-            if index == 0
-              p.inner_html = cp
-            else
-              last_node = last_node.after("<p>#{cp}</p>")
-            end
-            unless figures[index].nil?
-              last_node = last_node.after(figures[index].to_html)
-            end
-          end
-        end
-      end
-    end
 
     def clean_figures
       figures = @doc.xpath('//figure/figure')
       figures.each do |f|
         f.parent.swap(f.to_html)
+      end
+    end
+
+    def clean_headlines
+      (3..6).to_a.each do |hl|
+        headlines = @doc.xpath("//h#{hl}")
+        headlines.each do |headline|
+          headline.swap("<h2>#{headline.inner_html}</h2>")
+        end
       end
     end
 

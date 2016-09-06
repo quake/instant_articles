@@ -10,30 +10,7 @@ describe InstantArticles do
   def cleaned_value(value)
     value.gsub(/\s+/,'')
   end
-  
-  it "moves a figure right before the end of a paragraph out of the p tag" do
-    html1 = <<-HTML
-        <p>
-          Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.<figure><img src="example.com/img.jpg"></figure></p>
-    HTML
-    expected1 = <<-HTML
-        <p>
-          Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p><figure><img src="example.com/img.jpg"></figure>
-    HTML
-    expect(cleaned_content(html1)).to eq(cleaned_value(expected1))
-  end
 
-  it "splits a paragraph with multiple figures into parts" do
-    html1 = <<-HTML
-        <p>
-          Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. <figure><img src="example.com/img.jpg"></figure> Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.<figure><img src="example.com/img.jpg"></figure></p>
-    HTML
-    expected1 = <<-HTML
-        <p>
-          Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p><figure><img src="example.com/img.jpg"></figure><p> Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p><figure><img src="example.com/img.jpg"></figure>
-    HTML
-    expect(cleaned_content(html1)).to eq(cleaned_value(expected1))
-  end
 
   it "moves embedded videos and iframes into a figure tag" do
     html1 = <<-HTML
@@ -48,19 +25,7 @@ describe InstantArticles do
     expect(cleaned_content(html1)).to eq(cleaned_value(expected1))
   end
 
-  it "removes p tags around script tags" do
-    html1 = <<-HTML
-        <p></p>
-        <p>
-        <script src="//platform.twitter.com/widgets.js"></script>
-        </p>
-    HTML
-    expected1 = <<-HTML
-        <script src="//platform.twitter.com/widgets.js"></script>
-    HTML
 
-    expect(cleaned_content(html1)).to eq(cleaned_value(expected1))
-  end
 
   it "surrounds also iframes with a figure tag" do
     html1 = <<-HTML
@@ -102,8 +67,8 @@ describe InstantArticles do
     HTML
     expected1 = <<-HTML
         <figure class="op-interactive">
-          <blockquote class="instagram-media">
-          </blockquote>
+          <iframe><blockquote class="instagram-media">
+          </blockquote></iframe>
         </figure>
     HTML
 
@@ -115,7 +80,7 @@ describe InstantArticles do
         <blockquote class="instagram-media" style="border: 0px; max-width: 658px; width: calc(100% - 2px);margin: 1px;border-radius: 4px; box-shadow: rgba(0, 0, 0, 0.498039) 0px 0px 1px 0px, rgba(0, 0, 0, 0.14902) 0px 1px 10px 0px; display: block; padding: 0px; background: rgb(255, 255, 255);"></blockquote>
     HTML
     expected1 = <<-HTML
-        <figure class="op-interactive"><blockquote class="instagram-media" style="border: 0px; max-width: 658px; width: calc(100% - 2px);margin: 0 auto;border-radius: 4px; box-shadow: rgba(0, 0, 0, 0.498039) 0px 0px 1px 0px, rgba(0, 0, 0, 0.14902) 0px 1px 10px 0px; display: block; padding: 0px; background: rgb(255, 255, 255);"></blockquote></figure>
+        <figure class="op-interactive"><iframe><blockquote class="instagram-media" style="border: 0px; max-width: 658px; width: calc(100% - 2px);margin: 0 auto;border-radius: 4px; box-shadow: rgba(0, 0, 0, 0.498039) 0px 0px 1px 0px, rgba(0, 0, 0, 0.14902) 0px 1px 10px 0px; display: block; padding: 0px; background: rgb(255, 255, 255);"></blockquote></iframe></figure>
     HTML
     expect(cleaned_content(html1)).to eq(cleaned_value(expected1))
   end
@@ -179,9 +144,9 @@ describe InstantArticles do
     HTML
 
     expected1 = <<-HTML
-      <figure class="op-interactive"><blockquote class="twitter-tweet" data-lang="sv">
+      <figure class="op-interactive"><iframe><blockquote class="twitter-tweet" data-lang="sv">
       <p dir="ltr" lang="en">Before they knew it, he dragged her across their yard.. <a href="https://t.co/sQwcDTk9fi">https://t.co/sQwcDTk9fi</a></p>
-      HeroViral (@HeroViral) <a href="https://twitter.com/HeroViral/status/754754594765496320">17 juli 2016</a></blockquote></figure><script src="//platform.twitter.com/widgets.js"></script>
+      HeroViral (@HeroViral) <a href="https://twitter.com/HeroViral/status/754754594765496320">17 juli 2016</a></blockquote></iframe></figure><script src="//platform.twitter.com/widgets.js"></script>
     HTML
     expect(cleaned_content(html1)).to eq(cleaned_value(expected1))
   end
@@ -195,9 +160,9 @@ describe InstantArticles do
     HTML
 
     expected1 = <<-HTML
-      <figure class="op-interactive"><blockquote class="twitter-tweet" data-lang="sv">
+      <figure class="op-interactive"><iframe><blockquote class="twitter-tweet" data-lang="sv">
       <p dir="ltr" lang="en">Before they knew it, he dragged her across their yard.. <a href="https://t.co/sQwcDTk9fi">https://t.co/sQwcDTk9fi</a></p>
-      HeroViral (@HeroViral) <a href="https://twitter.com/HeroViral/status/754754594765496320">17 juli 2016</a></blockquote></figure>
+      HeroViral (@HeroViral) <a href="https://twitter.com/HeroViral/status/754754594765496320">17 juli 2016</a></blockquote></iframe></figure>
     HTML
     expect(cleaned_content(html1)).to eq(cleaned_value(expected1))
   end
@@ -225,26 +190,25 @@ describe InstantArticles do
     expect(cleaned_content(html1)).to eq(cleaned_value(expected1))
   end
 
-  it "should remove empty tags" do
-    html1 = <<-HTML
-      <p></p>
-    HTML
 
-    expected1 = <<-HTML
-      
+  it 'replaces all headlines except h1 with h2' do
+    html = <<-HTML
+      <h4>test</h4><h3>test</h3>
     HTML
-    expect(cleaned_content(html1)).to eq(cleaned_value(expected1))
-  end  
+    expected = <<-HTML
+      <h2>test</h2><h2>test</h2>
+    HTML
+    expect(cleaned_content(html)).to eq(cleaned_value(expected))
+  end
 
-  it "should remove p tags with &nbsp;" do
-    html1 = <<-HTML
-      <p>&nbsp;</p>
+  it 'surrounds instagram embeds with iframe and figure' do
+    html = <<-HTML
+      <blockquote class="instagram-media"></blockquote>
     HTML
-
-    expected1 = <<-HTML
-    
+    expected = <<-HTML
+      <figure class="op-interactive"><iframe><blockquote class="instagram-media"></blockquote></iframe></figure>
     HTML
-    expect(cleaned_content(html1)).to eq(cleaned_value(expected1))
-  end  
+    expect(cleaned_content(html)).to eq(cleaned_value(expected))
+  end
 
 end
