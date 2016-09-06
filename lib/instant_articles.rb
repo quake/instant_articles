@@ -66,7 +66,11 @@ module InstantArticles
       MEDIA_ELEMENTS.each do |tag|
         # surround iframes and images
         elements = @doc.xpath("//#{tag}")
+
+       
+
         elements.each do |element|
+
           # BlockQuotes
           if element.matches? 'blockquote'
             cls_name = element.attribute("class").nil? ? "" : element.attribute("class").value.to_s
@@ -102,12 +106,21 @@ module InstantArticles
           if element.matches?('blockquote')
 
             # Check if older parser have created figures without the script included
-            look_after_script = element.parent && element.parent.matches?("figure")
+            look_after_script = element.ancestors('figure').first
 
-            fig = @doc.create_element('figure')
+            # fig = element.parent.matches?('figure') ? element.parent  
+
+
+            if element.parent.matches?('figure')
+              fig = element.parent
+            else
+              fig = @doc.create_element('figure')
+              element.before(fig)
+            end
+
             fig['class'] = 'op-interactive'
             iframe = @doc.create_element('iframe')
-            element.before(fig)
+            
 
             if element.next_element && element.next_element.matches?('script')
               script = element.next_element
@@ -115,20 +128,16 @@ module InstantArticles
               iframe.add_child(script)
             else
               # If look after script and script after parent node is present. Include that into the figure
-              if look_after_script && element.parent && element.parent.next_element.matches?('script')
-                script = element.parent.next_element
+              if look_after_script && look_after_script.next_element.matches?('script')
+                script = look_after_script.next_element
+                
                 iframe.add_child(element)
                 iframe.add_child(script)
               else
                 iframe.add_child(element)
               end
-              
             end
-
-
-
-            fig.add_child(iframe)
-            return          
+            fig.add_child(iframe)      
           else
             next if element.parent.matches? 'figure'
             element.swap("<figure>#{element.to_html}</figure>")

@@ -267,14 +267,24 @@ describe InstantArticles do
     expect(cleaned_content(html)).to eq(cleaned_value(expected))
   end
 
-  it 'should wrap if next item is script to a figure' do
+  it 'should wrap multiple figures if next item is script to a figure' do
     html = <<-HTML
     <figure class="op-interactive">
         <blockquote class="instagram-media" style="background: #FFF; border: 0; border-radius: 3px; box-shadow: 0 0 1px 0 rgba(0,0,0,0.5),0 1px 10px 0 rgba(0,0,0,0.15); margin: 0 auto; max-width: 658px; padding: 0; width: calc(100% - 2px);" data-instgrm-captioned="" data-instgrm-version="7">
             <div style="padding: 8px;">
-                <div style="background: #F8F8F8; line-height: 0; margin-top: 40px; padding: 50% 0; text-align: center; width: 100%;"></div>
-                <p style="margin: 8px 0 0 0; padding: 0 4px;"><a style="color: #000; font-family: Arial,sans-serif; font-size: 14px; font-style: normal; font-weight: normal; line-height: 17px; text-decoration: none; word-wrap: break-word;" href="https://www.instagram.com/p/xhyv3kg3c-/" target="_blank">#cat #cats #catstagram #catsagram #instagood #kitten #kitty #kittens #pet #pets #animal #animals #petstagram #petsagram #photoftheday #catsofinstagram #ilovemycat #instagramcats #nature #catoftheday #lovecats #furry #lovekittens #adorable #catlover #instacat #MyGreatCat #excellent_cats #bengal #bengalcat</a></p>
-                <p style="color: #c9c8cd; font-family: Arial,sans-serif; font-size: 14px; line-height: 17px; margin-bottom: 0; margin-top: 8px; overflow: hidden; padding: 8px 0 7px; text-align: center; text-overflow: ellipsis; white-space: nowrap;">Ett foto publicerat av Thor The Bengal (@bengalthor) <time style="font-family: Arial,sans-serif; font-size: 14px; line-height: 17px;" datetime="2015-01-06T21:43:43+00:00">Jan 6, 2015 kl. 1:43 PST</time></p>
+                <div style="background: #F8F8F8; line-height: 0; margin-top: 40px; padding: 50.0% 0; text-align: center; width: 100%;"></div>
+                <p style="margin: 8px 0 0 0; padding: 0 4px;"><a style="color: #000; font-family: Arial,sans-serif; font-size: 14px; font-style: normal; font-weight: normal; line-height: 17px; text-decoration: none; word-wrap: break-word;" href="https://www.instagram.com/p/BJbPk7xB5SD/" target="_blank">🐯. #cat #cats #catstagram #catsagram #instagood #kitten #kitty #kittens #pet #pets #animal #animals #petstagram #petsagram #photoftheday #catsofinstagram #ilovemycat #instagramcats #catoftheday #lovecats #furry #lovekittens #adorable #catlover #instacat #MyGreatCat #excellent_cats #bengal #bengalcat #cat_features</a></p>
+                <p style="color: #c9c8cd; font-family: Arial,sans-serif; font-size: 14px; line-height: 17px; margin-bottom: 0; margin-top: 8px; overflow: hidden; padding: 8px 0 7px; text-align: center; text-overflow: ellipsis; white-space: nowrap;">Ett foto publicerat av Thor The Bengal (@bengalthor) <time style="font-family: Arial,sans-serif; font-size: 14px; line-height: 17px;" datetime="2016-08-22T21:14:24+00:00">Aug 22, 2016 kl. 2:14 PDT</time></p>
+            </div>
+        </blockquote>
+    </figure>
+    <script src="//platform.instagram.com/en_US/embeds.js"></script>
+    <figure class="op-interactive">
+        <blockquote class="instagram-media" style="background: #FFF; border: 0; border-radius: 3px; box-shadow: 0 0 1px 0 rgba(0,0,0,0.5),0 1px 10px 0 rgba(0,0,0,0.15); margin: 0 auto; max-width: 658px; padding: 0; width: calc(100% - 2px);" data-instgrm-captioned="" data-instgrm-version="7">
+            <div style="padding: 8px;">
+                <div style="background: #F8F8F8; line-height: 0; margin-top: 40px; padding: 50.0% 0; text-align: center; width: 100%;"></div>
+                <p style="margin: 8px 0 0 0; padding: 0 4px;"><a style="color: #000; font-family: Arial,sans-serif; font-size: 14px; font-style: normal; font-weight: normal; line-height: 17px; text-decoration: none; word-wrap: break-word;" href="https://www.instagram.com/p/68M1SOg3VX/" target="_blank">King Thor 👑</a></p>
+                <p style="color: #c9c8cd; font-family: Arial,sans-serif; font-size: 14px; line-height: 17px; margin-bottom: 0; margin-top: 8px; overflow: hidden; padding: 8px 0 7px; text-align: center; text-overflow: ellipsis; white-space: nowrap;">Ett foto publicerat av Thor The Bengal (@bengalthor) <time style="font-family: Arial,sans-serif; font-size: 14px; line-height: 17px;" datetime="2015-08-28T20:34:27+00:00">Aug 28, 2015 kl. 1:34 PDT</time></p>
             </div>
         </blockquote>
     </figure>
@@ -285,15 +295,27 @@ describe InstantArticles do
     <figure class="op-interactive">
       <iframe>
         <blockquote class="instagram-media" style="background: #FFF; border: 0; border-radius: 3px; box-shadow: 0 0 1px 0 rgba(0,0,0,0.5),0 1px 10px 0 rgba(0,0,0,0.15); margin: 0 auto; max-width: 658px; padding: 0; width: calc(100% - 2px);" data-instgrm-captioned="" data-instgrm-version="7">
-          <div style="padding: 8px;">
-              <div style="background: #F8F8F8; line-height: 0; margin-top: 40px; padding: 50% 0; text-align: center; width: 100%;"></div>
-              <p style="margin: 8px 0 0 0; padding: 0 4px;"><a style="color: #000; font-family: Arial,sans-serif; font-size: 14px; font-style: normal; font-weight: normal; line-height: 17px; text-decoration: none; word-wrap: break-word;" href="https://www.instagram.com/p/xhyv3kg3c-/" target="_blank">#cat #cats #catstagram #catsagram #instagood #kitten #kitty #kittens #pet #pets #animal #animals #petstagram #petsagram #photoftheday #catsofinstagram #ilovemycat #instagramcats #nature #catoftheday #lovecats #furry #lovekittens #adorable #catlover #instacat #MyGreatCat #excellent_cats #bengal #bengalcat</a></p>
-              <p style="color: #c9c8cd; font-family: Arial,sans-serif; font-size: 14px; line-height: 17px; margin-bottom: 0; margin-top: 8px; overflow: hidden; padding: 8px 0 7px; text-align: center; text-overflow: ellipsis; white-space: nowrap;">Ett foto publicerat av Thor The Bengal (@bengalthor) <time style="font-family: Arial,sans-serif; font-size: 14px; line-height: 17px;" datetime="2015-01-06T21:43:43+00:00">Jan 6, 2015 kl. 1:43 PST</time></p>
-          </div>
+            <div style="padding: 8px;">
+                <div style="background: #F8F8F8; line-height: 0; margin-top: 40px; padding: 50.0% 0; text-align: center; width: 100%;"></div>
+                <p style="margin: 8px 0 0 0; padding: 0 4px;"><a style="color: #000; font-family: Arial,sans-serif; font-size: 14px; font-style: normal; font-weight: normal; line-height: 17px; text-decoration: none; word-wrap: break-word;" href="https://www.instagram.com/p/BJbPk7xB5SD/" target="_blank">🐯. #cat #cats #catstagram #catsagram #instagood #kitten #kitty #kittens #pet #pets #animal #animals #petstagram #petsagram #photoftheday #catsofinstagram #ilovemycat #instagramcats #catoftheday #lovecats #furry #lovekittens #adorable #catlover #instacat #MyGreatCat #excellent_cats #bengal #bengalcat #cat_features</a></p>
+                <p style="color: #c9c8cd; font-family: Arial,sans-serif; font-size: 14px; line-height: 17px; margin-bottom: 0; margin-top: 8px; overflow: hidden; padding: 8px 0 7px; text-align: center; text-overflow: ellipsis; white-space: nowrap;">Ett foto publicerat av Thor The Bengal (@bengalthor) <time style="font-family: Arial,sans-serif; font-size: 14px; line-height: 17px;" datetime="2016-08-22T21:14:24+00:00">Aug 22, 2016 kl. 2:14 PDT</time></p>
+            </div>
         </blockquote>
         <script src="//platform.instagram.com/en_US/embeds.js"></script>        
       </iframe>  
     </figure>
+    <figure class="op-interactive">
+      <iframe>
+        <blockquote class="instagram-media" style="background: #FFF; border: 0; border-radius: 3px; box-shadow: 0 0 1px 0 rgba(0,0,0,0.5),0 1px 10px 0 rgba(0,0,0,0.15); margin: 0 auto; max-width: 658px; padding: 0; width: calc(100% - 2px);" data-instgrm-captioned="" data-instgrm-version="7">
+            <div style="padding: 8px;">
+                <div style="background: #F8F8F8; line-height: 0; margin-top: 40px; padding: 50.0% 0; text-align: center; width: 100%;"></div>
+                <p style="margin: 8px 0 0 0; padding: 0 4px;"><a style="color: #000; font-family: Arial,sans-serif; font-size: 14px; font-style: normal; font-weight: normal; line-height: 17px; text-decoration: none; word-wrap: break-word;" href="https://www.instagram.com/p/68M1SOg3VX/" target="_blank">King Thor 👑</a></p>
+                <p style="color: #c9c8cd; font-family: Arial,sans-serif; font-size: 14px; line-height: 17px; margin-bottom: 0; margin-top: 8px; overflow: hidden; padding: 8px 0 7px; text-align: center; text-overflow: ellipsis; white-space: nowrap;">Ett foto publicerat av Thor The Bengal (@bengalthor) <time style="font-family: Arial,sans-serif; font-size: 14px; line-height: 17px;" datetime="2015-08-28T20:34:27+00:00">Aug 28, 2015 kl. 1:34 PDT</time></p>
+            </div>
+        </blockquote>
+        <script src="//platform.instagram.com/en_US/embeds.js"></script>        
+      </iframe>  
+    </figure>    
     HTML
     expect(cleaned_content(html)).to eq(cleaned_value(expected))
   end
