@@ -30,6 +30,7 @@ module InstantArticles
 
     def clean_paragraphs
       @doc.xpath('//p').each do |p|
+        next if p.nil?
         if p.inner_html == "\u00A0" then p.remove end
 
         last_node = p
@@ -49,6 +50,7 @@ module InstantArticles
           figures = p > 'figure'
           content_parts = p.inner_html.split(%r{<figure\b[^>]*>.*?</figure>})
           content_parts.each_with_index do |cp, index|
+            next if cp.nil?
             if index == 0
               p.inner_html = cp
             else
@@ -70,7 +72,7 @@ module InstantArticles
        
 
         elements.each do |element|
-
+          next if element.nil?
           # BlockQuotes
           if element.matches? 'blockquote'
             cls_name = element.attribute("class").nil? ? "" : element.attribute("class").value.to_s
@@ -111,7 +113,7 @@ module InstantArticles
             # fig = element.parent.matches?('figure') ? element.parent  
 
 
-            if element.parent.matches?('figure')
+            if element.parent && element.parent.matches?('figure')
               fig = element.parent
             else
               fig = @doc.create_element('figure')
@@ -128,7 +130,7 @@ module InstantArticles
               iframe.add_child(script)
             else
               # If look after script and script after parent node is present. Include that into the figure
-              if look_after_script && look_after_script.next_element.matches?('script')
+              if look_after_script && look_after_script.next_element && look_after_script.next_element.matches?('script')
                 script = look_after_script.next_element
                 
                 iframe.add_child(element)
@@ -139,7 +141,7 @@ module InstantArticles
             end
             fig.add_child(iframe)      
           else
-            next if element.parent.matches? 'figure'
+            next if element.parent && element.parent.matches?('figure')
             element.swap("<figure>#{element.to_html}</figure>")
           end
         end
