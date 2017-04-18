@@ -2,11 +2,11 @@ require 'spec_helper'
 require 'instant_articles'
 
 describe InstantArticles do
-  
+
   def cleaned_content(html)
     cleaned_value(InstantArticles::Content.new(html).content_html)
   end
-  
+
   def cleaned_value(value)
     value.gsub(/\s+/,'')
   end
@@ -25,7 +25,20 @@ describe InstantArticles do
     expect(cleaned_content(html1)).to eq(cleaned_value(expected1))
   end
 
+  it "convert first level div to paragraphs" do
+    html1 = <<-HTML
+      <div>foo
+      <figure><img src="http://s3.eu-central-1.amazonaws.com/cdn.newsner.com/attachments/images/000/247/769/newsner_default/flickan.jpg?1465318999" ></figure>
+      bar</div>
+    HTML
 
+    expected1 = <<-HTML
+      <p>foo</p>
+      <p>bar</p>
+      <figure><img src="http://s3.eu-central-1.amazonaws.com/cdn.newsner.com/attachments/images/000/247/769/newsner_default/flickan.jpg?1465318999" data-mode="aspect-fit"></figure>
+    HTML
+    expect(cleaned_content(html1)).to eq(cleaned_value(expected1))
+  end
 
   it "surrounds also iframes with a figure tag" do
     html1 = <<-HTML
@@ -176,7 +189,7 @@ describe InstantArticles do
       </iframe></figure>
     HTML
     expect(cleaned_content(html1)).to eq(cleaned_value(expected1))
-  end  
+  end
 
 
   it "surrounds tweets blockquoute with figure tag around without script tag" do
@@ -301,8 +314,8 @@ describe InstantArticles do
                 <p style="color: #c9c8cd; font-family: Arial,sans-serif; font-size: 14px; line-height: 17px; margin-bottom: 0; margin-top: 8px; overflow: hidden; padding: 8px 0 7px; text-align: center; text-overflow: ellipsis; white-space: nowrap;">Ett foto publicerat av Thor The Bengal (@bengalthor) <time style="font-family: Arial,sans-serif; font-size: 14px; line-height: 17px;" datetime="2016-08-22T21:14:24+00:00">Aug 22, 2016 kl. 2:14 PDT</time></p>
             </div>
         </blockquote>
-        <script src="//platform.instagram.com/en_US/embeds.js"></script>        
-      </iframe>  
+        <script src="//platform.instagram.com/en_US/embeds.js"></script>
+      </iframe>
     </figure>
     <figure class="op-interactive">
       <iframe>
@@ -313,9 +326,9 @@ describe InstantArticles do
                 <p style="color: #c9c8cd; font-family: Arial,sans-serif; font-size: 14px; line-height: 17px; margin-bottom: 0; margin-top: 8px; overflow: hidden; padding: 8px 0 7px; text-align: center; text-overflow: ellipsis; white-space: nowrap;">Ett foto publicerat av Thor The Bengal (@bengalthor) <time style="font-family: Arial,sans-serif; font-size: 14px; line-height: 17px;" datetime="2015-08-28T20:34:27+00:00">Aug 28, 2015 kl. 1:34 PDT</time></p>
             </div>
         </blockquote>
-        <script src="//platform.instagram.com/en_US/embeds.js"></script>        
-      </iframe>  
-    </figure>    
+        <script src="//platform.instagram.com/en_US/embeds.js"></script>
+      </iframe>
+    </figure>
     HTML
     expect(cleaned_content(html)).to eq(cleaned_value(expected))
   end

@@ -21,11 +21,18 @@ module InstantArticles
     protected
 
     def clean_content
+      convert_first_level_div_to_paragraphs
       clean_paragraphs
       replace_media
       clean_figures
       clean_headlines
       clean_images
+    end
+
+    def convert_first_level_div_to_paragraphs
+      @doc.xpath('//body/div').each do |ele|
+        ele.name = 'p'
+      end
     end
 
     def clean_paragraphs
@@ -69,7 +76,7 @@ module InstantArticles
         # surround iframes and images
         elements = @doc.xpath("//#{tag}")
 
-       
+
 
         elements.each do |element|
           next if element.nil?
@@ -110,7 +117,7 @@ module InstantArticles
             # Check if older parser have created figures without the script included
             look_after_script = element.ancestors('figure').first
 
-            # fig = element.parent.matches?('figure') ? element.parent  
+            # fig = element.parent.matches?('figure') ? element.parent
 
 
             if element.parent && element.parent.matches?('figure')
@@ -122,7 +129,7 @@ module InstantArticles
 
             fig['class'] = 'op-interactive'
             iframe = @doc.create_element('iframe')
-            
+
 
             if element.next_element && element.next_element.matches?('script')
               script = element.next_element
@@ -132,14 +139,14 @@ module InstantArticles
               # If look after script and script after parent node is present. Include that into the figure
               if look_after_script && look_after_script.next_element && look_after_script.next_element.matches?('script')
                 script = look_after_script.next_element
-                
+
                 iframe.add_child(element)
                 iframe.add_child(script)
               else
                 iframe.add_child(element)
               end
             end
-            fig.add_child(iframe)      
+            fig.add_child(iframe)
           else
             next if element.parent && element.parent.matches?('figure')
             element.swap("<figure>#{element.to_html}</figure>")
